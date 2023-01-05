@@ -38,6 +38,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // create new product
+// fix later (working but throwing 400 error)
 router.post('/', (req, res) => {
   /* req.body should look like this...
     {
@@ -113,6 +114,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  try {
+    const deleteProduct = Product.destroy({
+      where: {
+        id: req.params.id,
+      }
+    })
+    if (!deleteProduct) {
+      res.status(404).json({ message: 'No category found with this id '});
+      return;
+    }
+    
+    res.status(200).json('success');
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
